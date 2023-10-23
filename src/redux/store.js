@@ -9,21 +9,25 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist';
+
 import storage from 'redux-persist/lib/storage';
 
-import { postDetailsReducer } from './postDetailReducer';
+import { contactsReducer } from './ContactsSlice';
 
-const postDetailsConfig = {
-  key: 'postDetails',
+const persistConfig = {
+  key: 'contacts',
   storage,
-  whitelist: ['posts'],
-  //   blacklist: ['filter'],
+  //whitelist: ['posts'],
+  blacklist: ['filter'],
 };
+
+const persistedContactsReducer = persistReducer(persistConfig, contactsReducer);
 
 export const store = configureStore({
   reducer: {
-    postDetails: persistReducer(postDetailsConfig, postDetailsReducer),
+    contacts: persistedContactsReducer,
   },
+
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: {
@@ -33,3 +37,4 @@ export const store = configureStore({
 });
 
 export const persistor = persistStore(store);
+export default store;
