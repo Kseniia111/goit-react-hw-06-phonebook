@@ -1,38 +1,23 @@
 import React from 'react';
-import { useState } from 'react';
 import { nanoid } from 'nanoid';
 import css from './ContactForm.module.css';
+import { useDispatch } from 'react-redux';
+import { addContact } from 'redux/ContactsSlice';
 
-export const ContactForm = ({ onSubmit }) => {
-  const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
+export const ContactForm = () => {
+  const dispatch = useDispatch();
 
-  const handleChange = event => {
-    const { name, value } = event.currentTarget;
+  const handleSubmit = e => {
+    e.preventDefault();
 
-    switch (name) {
-      case 'name':
-        setName(value);
-        break;
-      case 'number':
-        setNumber(value);
-        break;
+    const newObj = {
+      id: nanoid(),
+      name: e.target.elements.name.value,
+      number: e.target.elements.number.value,
+    };
+    dispatch(addContact(newObj));
 
-      default:
-        return;
-    }
-  };
-
-  const handleSubmit = event => {
-    event.preventDefault();
-    const newContact = { name, number, id: 'id' + nanoid() };
-    onSubmit(newContact);
-    reset();
-  };
-
-  const reset = () => {
-    setName('');
-    setNumber('');
+    e.target.reset();
   };
 
   return (
@@ -41,9 +26,8 @@ export const ContactForm = ({ onSubmit }) => {
         Name
         <input
           className={css.formInput}
+          placeholder="Name"
           type="text"
-          value={name}
-          onChange={handleChange}
           name="name"
           required
         />
@@ -52,9 +36,8 @@ export const ContactForm = ({ onSubmit }) => {
         Number
         <input
           className={css.formInput}
+          placeholder="Phone number"
           type="tel"
-          value={number}
-          onChange={handleChange}
           name="number"
           required
         />
