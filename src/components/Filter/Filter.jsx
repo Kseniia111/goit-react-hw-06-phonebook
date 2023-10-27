@@ -1,16 +1,16 @@
-//import { nanoid } from 'nanoid';
 import { useDispatch, useSelector } from 'react-redux';
-import { filterContacts } from 'redux/FilterSlice';
+import { setFilter } from 'redux/FilterSlice';
+import { selectFilter } from 'redux/Selectors';
 import css from './Filter.module.css';
 
-//const filterId = nanoid();
-
-export const Filter = () => {
+const Filter = () => {
   const dispatch = useDispatch();
-  const filter = useSelector(state => state.filter);
+  const filter = useSelector(selectFilter);
 
-  const showFilteredcontacts = e => {
-    dispatch(filterContacts(e.target.value));
+  const handleFilterChange = filter => dispatch(setFilter(filter));
+  const changeFilter = e => {
+    handleFilterChange(e.currentTarget.value);
+    console.log(filter);
   };
 
   return (
@@ -21,9 +21,11 @@ export const Filter = () => {
           className={css.formInput}
           type="text"
           value={filter}
-          onChange={showFilteredcontacts}
+          onChange={changeFilter}
         />
       </label>
     </div>
   );
 };
+
+export default Filter;
